@@ -141,6 +141,7 @@ class PropertyEditor {
 class PrimaryCanvas {
 
     constructor() {
+        this.cameraOffset = [0, 0];  // for panning
         this.canvas = document.getElementById("primaryCanvas");
         this.context = this.canvas.getContext("webgl");
         this.renderer = new Renderer(this.canvas, this.context);
@@ -150,6 +151,36 @@ class PrimaryCanvas {
             if (ev.buttons & 1)
                 this.rotateByMouseDelta(ev.movementX, ev.movementY);
         });
+  let isDragging = false;
+  let lastX = 0, lastY = 0;
+
+  this.canvas.addEventListener("mousedown", (ev) => {
+    if (ev.button === 1 || (ev.button === 2 && ev.shiftKey)) {  // middle or shift+right
+        isDragging = true;
+        lastX = ev.clientX;
+        lastY = ev.clientY;
+        ev.preventDefault();
+    }
+});
+
+this.canvas.addEventListener("mousemove", (ev) => {
+    if (isDragging) {
+        const dx = ev.clientX - lastX;
+        const dy = ev.clientY - lastY;
+        lastX = ev.clientX;
+        lastY = ev.clientY;
+        this.renderer.cameraOffset = this.renderer.cameraOffset || [0, 0];
+        this.renderer.cameraOffset[0] -= dx * 0.01;
+        this.renderer.cameraOffset[1] += dy * 0.01;
+        this.draw();
+    }
+});
+
+    this.canvas.addEventListener("mouseup", () => {
+    isDragging = false;
+});
+
+    this.canvas.addEventListener("contextmenu", e => e.preventDefault());  // disable right-click menu
     const canvas = this.canvas;
     canvas.addEventListener('wheel', (event) => {
     event.preventDefault();
