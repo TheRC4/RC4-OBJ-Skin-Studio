@@ -1,0 +1,152 @@
+html, body {
+    cursor: default;
+    user-select: none;
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    background: #000a12;
+    color: #fff;
+    font-family: sans-serif;
+}
+body {
+    display: flex;
+    flex-direction: column;
+}
+a {
+    color: #2979ff;
+}
+#skins {
+    display: flex;
+    flex-direction: row;
+    padding: 4px;
+    margin: 0;
+    list-style: none;
+}
+#skins > .skin, #addSkin {
+    cursor: pointer;
+    margin-right: 4px;
+    padding: 0;
+    background: rgba(255, 255, 255, 0.2);
+    line-height: 0;
+}
+#skins > .skin.selected {
+    background: rgba(255, 255, 255, 0.3);
+}
+#addSkin {
+    display: block;
+    width: 64px;
+    height: 64px;
+    line-height: 64px !important;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 28px;
+    padding: 0;
+    border-radius: 2px;
+}
+#export {
+    margin-left: auto;
+    align-self: center;
+    padding: 8px;
+}
+#main {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: row;
+}
+#primaryCanvas {
+    width: 1px;
+    flex-basis: 1px;
+    flex-grow: 1;
+}
+#panel {
+    min-width: 200px;
+    background: #263238;
+}
+.panelTitle {
+    padding: 4px 6px;
+    margin: 0;
+    background: #37474f;
+}
+#groupTree, #inspector {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+#groupTree li, #inspector li {
+    padding: 2px 6px;
+}
+#groupTree li.selected {
+    background: rgba(0, 176, 255, 0.3);
+}
+.button {
+    display: inline-block;
+    padding: 2px 4px;
+    background: #2979ff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 2px;
+    cursor: pointer;
+}
+
+#point3DMover {
+    position: absolute;
+    left: 100px;
+    top: 100px;
+    z-index: 100;
+}
+#point3DMover .circle {
+    position: absolute;
+    left: -4px;
+    top: -4px;
+    width: 8px;
+    height: 8px;
+    background: #2979ff;
+    border: 1px solid white;
+    border-radius: 8px;
+    z-index: 104;
+}
+#point3DMover .moveHandle {
+    position: absolute;
+    left: 0;
+    top: -2px;
+    width: 50px;
+    height: 4px;
+    transform-origin: 0 50%;
+}
+#point3DMover .moveHandle .arrow {
+    position: absolute;
+    right: -8px;
+    top: -6px;
+    width: 0;
+    height: 0;
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+}
+#point3DMoverX {
+    background: red;
+}
+#point3DMoverX .arrow {
+    border-left: 8px solid red;
+}
+#point3DMoverY {
+    background: green;
+}
+#point3DMoverY .arrow {
+    border-left: 8px solid green;
+}
+#point3DMoverZ {
+    background: blue;
+}
+#point3DMoverZ .arrow {
+    border-left: 8px solid blue;
+}
+#point3DMover .moveHandle:hover {
+    background: aqua;
+}
+#point3DMover .moveHandle:hover .arrow {
+    border-left: 8px solid aqua;
+}
+
+.prop-vec3 input {
+    width: 40px;
+}
