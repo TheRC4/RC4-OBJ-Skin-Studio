@@ -43,10 +43,60 @@ a {
     padding: 0;
     border-radius: 2px;
 }
+
+.skinName {
+  font-size: 12px;
+  text-align: center;
+  color: #337cfa;
+  margin-top: 4px;
+}
+
+
 #export {
     margin-left: auto;
     align-self: center;
     padding: 8px;
+
+#inspectDefaultActions .actionButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 6px;
+}
+
+#inspectDefaultActions .geometryButton {
+  margin-top: 4px;
+}
+
+#inspector,
+#groupTree {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+#inspector li,
+#groupTree li {
+  margin-bottom: 6px;
+}
+
+.prop-vec3 input {
+  width: 40px;
+  margin: 0 2px;
+  color: white;
+  background: #1e1e1e;
+  border: 1px solid #555;
+  padding: 2px 4px;
+}
+
+.prop-vec3 span,
+.prop-bone span {
+  display: inline-block;
+  min-width: 40px;
+  margin-right: 4px;
+  color: white;
+}
+
 }
 #main {
     flex-grow: 1;
@@ -59,9 +109,20 @@ a {
     flex-grow: 1;
 }
 #panel {
-    min-width: 200px;
-    background: #263238;
+  width: 350px;
+  max-width: 350px;
+  flex-shrink: 0;
+  background-color: #263238;
+  overflow-x: hidden;
+  padding-right: 6px;
 }
+
+#main {
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+}
+
 .panelTitle {
     padding: 4px 6px;
     margin: 0;
