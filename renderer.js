@@ -27,7 +27,7 @@ class Renderer {
         this.canvas = canvas;
         this.context = context;
         this.rotationX = this.rotationY = 0;
-        this.zoom = 10;
+        this.zoom = 5;
         this.highlightedVertexStart = this.highlightedVertexEnd = -1;
         this.hasModel = this.hasTexture = false;
         this.bgColor = [1, 1, 1, 1];
@@ -105,7 +105,7 @@ class Renderer {
         mat4.perspective(mat, 0.5, this.canvas.width / this.canvas.height, 0.1, 100);
         let lookMat = mat4.create();
         let offsetX = this.cameraOffset ? this.cameraOffset[0] : 0;
-        let offsetY = this.cameraOffset ? this.cameraOffset[1] : 0;
+        let offsetY = this.cameraOffset ? this.cameraOffset[1] : 1;
         mat4.lookAt(lookMat, [offsetX, offsetY, -this.zoom], [offsetX, offsetY, 0], [0, 1, 0]);
         mat4.mul(mat, mat, lookMat);
         mat4.rotateX(mat, mat, -this.rotationY);
