@@ -401,6 +401,9 @@ class Skin {
     constructor(index) {
         this.index = index;
         this.image = null;
+        this.name = "Skin " + index;
+        this.geometryId = "n" + index;
+        this.textureName = "skin_" + index;
         this.imageUrl = null;
         this.model = null;
         this.modelStr = null;
@@ -411,6 +414,9 @@ class Skin {
 
     loadFromLS() {
         this.setImage(localStorage.getItem("skin." + this.index + ".image"));
+        this.name = localStorage.getItem("skin." + this.index + ".name") || ("Skin " + this.index);
+        this.geometryId = localStorage.getItem("skin." + this.index + ".geometryId") || ("n" + this.index);
+        this.textureName = localStorage.getItem("skin." + this.index + ".textureName") || ("skin_" + this.index);
         this.modelStr = localStorage.getItem("skin." + this.index + ".model");
         this.model = this.modelStr ? ObjModel.parse(this.modelStr) : null;
         this.bones = JSON.parse(localStorage.getItem("skin." + this.index + ".bones"));
@@ -483,6 +489,18 @@ class Skin {
         if (this.imageUrl !== null)
             localStorage.setItem("skin." + this.index + ".image", this.imageUrl);
     }
+    saveNameToLS() {
+            localStorage.setItem("skin." + this.index + ".name", this.name);
+    }
+
+    saveGeometryIdToLS() {
+            localStorage.setItem("skin." + this.index + ".geometryId", this.geometryId);
+    }
+
+    saveTextureNameToLS() {
+            localStorage.setItem("skin." + this.index + ".textureName", this.textureName);
+    }
+
 
     saveModelToLS() {
         if (this.modelStr !== null)
@@ -599,12 +617,20 @@ class SkinListUi {
     createEntryDOM(skin) {
         let el = document.createElement("li");
         el.classList.add("skin");
-        el.img = document.createElement("img");
-        el.appendChild(el.img);
+        let img = document.createElement("img");
+        el.appendChild(img);
+        el.img = img;
+        let nameLabel = document.createElement("div");
+        nameLabel.classList.add("skinName");
+        nameLabel.textContent = skin.name;
+        el.appendChild(nameLabel);
+
         el.addEventListener("click", () => {
             this.activeCallback(skin);
-        });
-        return el;
+     });
+
+ return el;
+
     }
 
 }
@@ -746,6 +772,41 @@ class UiManager {
             () => this.deleteSkin(this.activeSkin));
         document.getElementById("export").addEventListener("click",
             () => this.export());
+        document.getElementById("renameSkinBtn").addEventListener("click", () => {
+                if (!this.activeSkin) return;
+
+                const newName = prompt("Enter a new name for the skin:", this.activeSkin.name);
+                if (newName !== null && newName.trim() !== "") {       
+                this.activeSkin.name = newName.trim();
+                this.activeSkin.saveNameToLS();
+                this.skinListUi.setSkinList(this.skins);
+
+    }
+});
+
+        document.getElementById("renameGeometryBtn").addEventListener("click", () => {
+                if (!this.activeSkin) return;
+
+                const newId = prompt("Enter new geometry ID:", this.activeSkin.geometryId);
+                if (newId !== null && /^[a-zA-Z0-9_]+$/.test(newId)) {
+                    this.activeSkin.geometryId = newId.trim();
+                    this.activeSkin.saveGeometryIdToLS();
+                    this.skinListUi.setSkinList(this.skins);
+    }
+});
+
+        document.getElementById("renameTextureBtn").addEventListener("click", () => {
+                if (!this.activeSkin) return;
+
+                const newName = prompt("Enter new texture name (no extension):", this.activeSkin.textureName);
+                if (newName !== null && /^[a-zA-Z0-9_\-\.]+$/.test(newName)) {
+                        this.activeSkin.textureName = newName.trim();
+                        this.activeSkin.saveTextureNameToLS();
+                        this.skinListUi.setSkinList(this.skins);
+    }
+});
+
+
 
         this.loadCurrentSkins((skins) => this.setSkins(skins));
     }
@@ -845,9 +906,9 @@ class UiManager {
         let skins = [];
         for (let skin of this.skins) {
             skins.push({
-                "localization_name": "Skin #" + skin.index,
-                "geometry": "geometry.n" + skin.index,
-                "texture": "skin_" + skin.index + ".png",
+                "localization_name": skin.name,
+                "geometry": "geometry." + skin.geometryId,
+                "texture": skin.textureName + ".png",
                 "type": "free"
             });
         }
@@ -865,7 +926,7 @@ class UiManager {
         for (let skin of this.skins) {
             let geo = skin.exportGeometry();
             if (geo !== null)
-                result["geometry.n" + skin.index] = geo;
+                result["geometry." + skin.geometryId] = geo;
         }
         return result;
     }
@@ -890,7 +951,8 @@ class UiManager {
                 if (idx >= this.skins.length) {
                     cb();
                 } else {
-                    writer.add("skin_" + this.skins[idx].index + ".png", new zip.Data64URIReader(this.skins[idx].imageUrl), () => writeSkin(idx + 1, cb));
+                    writer.add(this.skins[idx].textureName + ".png",
+           new zip.Data64URIReader(this.skins[idx].imageUrl), () => writeSkin(idx + 1, cb));
                 }
             };
 
